@@ -7,6 +7,12 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Persistence\NewFolder\**" />
+    <EmbeddedResource Remove="Persistence\NewFolder\**" />
+    <None Remove="Persistence\NewFolder\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\ShippingOrders.Core\ShippingOrders.Core.csproj" />
   </ItemGroup>
 

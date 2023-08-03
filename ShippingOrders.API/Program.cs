@@ -1,19 +1,33 @@
+using Microsoft.OpenApi.Models;
+using ShippingOrders.Application;
+using ShippingOrders.Infrastructure;
+
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.AddApplicationModule();
+builder.Services.AddInfrastructureModule();
 
 // Add services to the container.
 
 builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerGen(opt =>
+{
+    opt.SwaggerDoc("V1", new OpenApiInfo
+    {
+        Title = "Test API Swagger Documentation",
+        Version = "V1",
+    });
+});
 
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
+
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
-    app.UseSwaggerUI();
+    app.UseSwaggerUI(opt => { opt.SwaggerEndpoint("/swagger/V1/swagger.json", "Test API Swagger Documentation"); });
 }
 
 app.UseHttpsRedirection();

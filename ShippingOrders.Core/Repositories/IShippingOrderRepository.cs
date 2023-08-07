@@ -1,11 +1,13 @@
-﻿using ShippingOrders.Core.Entities;
+using ShippingOrders.Core.Entities;
 
 namespace ShippingOrders.Core.Repositories
 {
     public interface IShippingOrderRepository
     {
-        Task<ShippingOrder> GetOrderByCodeAsync(string code);
+        Task<ShippingOrder> GetByCodeAsync(string code);
 
-        Task AddOrderAsync(ShippingOrder order);
+        Task AddAsync(ShippingOrder shippingOrder);
+
+        Task UpdateAsync(ShippingOrder shippingOrder);
     }
 }

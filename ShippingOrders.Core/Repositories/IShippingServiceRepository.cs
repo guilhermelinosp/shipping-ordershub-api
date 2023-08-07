@@ -1,9 +1,9 @@
-﻿using ShippingOrders.Core.Entities;
+using ShippingOrders.Core.Entities;
 
 namespace ShippingOrders.Core.Repositories
 {
     public interface IShippingServiceRepository
     {
-        Task<List<ShippingService>> GetAllServicesAsync();
+        Task<List<ShippingService>> GetAllAsync();
     }
 }

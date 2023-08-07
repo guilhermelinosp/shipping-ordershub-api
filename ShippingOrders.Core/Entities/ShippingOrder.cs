@@ -1,16 +1,16 @@
-﻿using ShippingOrders.Core.Enums;
+using ShippingOrders.Core.Enums;
 using ShippingOrders.Core.ValueObjects;
 
 namespace ShippingOrders.Core.Entities
 {
-    public class ShippingOrder : Base
+    public class ShippingOrder : EntityBase
     {
-        public ShippingOrder(string description, decimal totalWeight, DeliveryAddress deliveryAddress)
+        public ShippingOrder(string description, decimal weightInKg, DeliveryAddress deliveryAddress)
         {
             TrackingCode = GenerateTrackingCode();
             Description = description;
             PostedAt = DateTime.Now;
-            TotalWeight = totalWeight;
+            WeightInKg = weightInKg;
             DeliveryAddress = deliveryAddress;
             Status = ShippingOrderStatus.Started;
             Services = new List<ShippingOrderService>();
@@ -19,27 +19,28 @@ namespace ShippingOrders.Core.Entities
         public string TrackingCode { get; private set; }
         public string Description { get; private set; }
         public DateTime PostedAt { get; private set; }
-        public decimal TotalWeight { get; private set; }
+        public decimal WeightInKg { get; private set; }
         public DeliveryAddress DeliveryAddress { get; private set; }
         public ShippingOrderStatus Status { get; private set; }
-        public decimal TotalPrice { get; private set; }
-        public List<ShippingOrderService> Services { get; private set; }
+        private decimal TotalPrice { get; set; }
+        private List<ShippingOrderService> Services { get; set; }
 
         public void SetupServices(List<ShippingService> services)
         {
             foreach (var service in services)
             {
-                var servicePrice = service.PriceFixed + service.PriceKg * TotalWeight;
+                var servicePrice = service.FixedPrice + service.PricePerKg * WeightInKg;
 
                 TotalPrice += servicePrice;
                 Services.Add(new ShippingOrderService(service.Title, servicePrice));
             }
         }
 
-        private string GenerateTrackingCode()
+        private static string GenerateTrackingCode()
         {
-            const string chars = "ABCDEFGHIJKL0123456789MNOPQRSTUVWXYZ0123456789";
+            const string chars = "0123456789ABCDEFGHIJK0123456789LMNOPQRSTUVWXYZ0123456789";
             var random = new Random();
+
             var trackingCode = new char[10];
             for (var i = 0; i < 10; i++)
             {

@@ -1,4 +1,4 @@
-﻿using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using MongoDB.Bson;
 using MongoDB.Driver;
@@ -10,7 +10,8 @@ namespace ShippingOrders.Infrastructure
 {
     public static class InfrastructureModule
     {
-        public static IServiceCollection AddInfrastructureModule(this IServiceCollection services)
+        [Obsolete]
+        public static IServiceCollection AddInfrastructure(this IServiceCollection services)
         {
             services
                 .AddMongo()
@@ -20,21 +21,20 @@ namespace ShippingOrders.Infrastructure
         }
 
         [Obsolete]
-        public static IServiceCollection AddMongo(this IServiceCollection services)
+        private static IServiceCollection AddMongo(this IServiceCollection services)
         {
-            services.AddSingleton<MongoDbOptions>(sp =>
+            services.AddSingleton(sp =>
             {
                 var configuration = sp.GetService<IConfiguration>();
                 var options = new MongoDbOptions();
 
-                configuration.GetSection("MongoDb").Bind(options);
+                configuration?.GetSection("MongoDb").Bind(options);
 
                 return options;
             });
 
             services.AddSingleton<IMongoClient>(sp =>
             {
-                var configuration = sp.GetService<IConfiguration>();
                 var options = sp.GetService<MongoDbOptions>();
 
                 var client = new MongoClient(options.ConnectionString);

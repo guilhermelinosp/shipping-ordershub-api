@@ -1,19 +1,19 @@
-﻿using ShippingOrders.Core.Entities;
+using ShippingOrders.Core.Entities;
 using ShippingOrders.Core.ValueObjects;
 
-namespace ShippingOrders.Application.InputModels
+namespace ShippingOrders.Application.Models.InputModels
 {
     public class AddShippingOrderInputModel
     {
         public string Description { get; set; }
-        public decimal TotalWeight { get; set; }
+        public decimal WeightInKg { get; set; }
         public DeliveryAddressInputModel DeliveryAddress { get; set; }
         public List<ShippingServiceInputModel> Services { get; set; }
 
         public ShippingOrder ToEntity()
             => new(
                 Description,
-                TotalWeight,
+                WeightInKg,
                 DeliveryAddress.ToValueObject()
             );
     }
@@ -28,16 +28,15 @@ namespace ShippingOrders.Application.InputModels
         public string Country { get; set; }
         public string ContactEmail { get; set; }
 
-        public DeliveryAddress ToValueObject()
-            => new(Street, Number, ZipCode, City, State, Country, ContactEmail);
+        public DeliveryAddress ToValueObject() => new(Street, Number, ZipCode, City, State, Country, ContactEmail);
     }
 
     public class ShippingServiceInputModel
     {
         public string Title { get; set; }
-        public decimal PriceKg { get; set; }
-        public decimal PriceFixed { get; set; }
+        public decimal PricePerKg { get; set; }
+        public decimal FixedPrice { get; set; }
 
-        public ShippingService ToEntity() => new(Title, PriceKg, PriceFixed);
+        public ShippingService ToEntity() => new(Title, PricePerKg, FixedPrice);
     }
 }

@@ -1,4 +1,4 @@
-﻿using ShippingOrders.Application.ViewModels;
+using ShippingOrders.Application.Models.ViewModels;
 using ShippingOrders.Core.Repositories;
 
 namespace ShippingOrders.Application.Services.Implementations
@@ -12,12 +12,12 @@ namespace ShippingOrders.Application.Services.Implementations
             _repository = repository;
         }
 
-        public async Task<List<ShippingServiceViewModel>> GetAllServicesAsync()
+        public async Task<List<ShippingServiceViewModel>> GetAll()
         {
-            var shippingServices = await _repository.GetAllServicesAsync();
+            var shippingServices = await _repository.GetAllAsync();
 
             return shippingServices
-                .Select(s => new ShippingServiceViewModel(s.Id, s.Title, s.PriceKg, s.PriceFixed))
+                .Select(s => new ShippingServiceViewModel(s.Id, s.Title, s.PricePerKg, s.FixedPrice))
                 .ToList();
         }
     }

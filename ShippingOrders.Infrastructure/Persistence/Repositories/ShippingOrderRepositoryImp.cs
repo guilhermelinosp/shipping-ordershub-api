@@ -1,4 +1,4 @@
-﻿using MongoDB.Driver;
+using MongoDB.Driver;
 using ShippingOrders.Core.Entities;
 using ShippingOrders.Core.Repositories;
 
@@ -13,14 +13,20 @@ namespace ShippingOrders.Infrastructure.Persistence.Repositories
             _collection = database.GetCollection<ShippingOrder>("shipping-orders");
         }
 
-        public async Task<ShippingOrder> GetOrderByCodeAsync(string code)
+        public async Task AddAsync(ShippingOrder shippingOrder)
         {
-            return await _collection.Find(c => c.TrackingCode == code).FirstOrDefaultAsync();
+            await _collection.InsertOneAsync(shippingOrder);
         }
 
-        public async Task AddOrderAsync(ShippingOrder order)
+        public async Task<ShippingOrder> GetByCodeAsync(string code)
         {
-            await _collection.InsertOneAsync(order);
+            return await _collection.Find(c => c.TrackingCode == code).SingleOrDefaultAsync();
+        }
+
+        public async Task UpdateAsync(ShippingOrder shippingOrder)
+        {
+            await _collection
+                .ReplaceOneAsync(so => so.TrackingCode == shippingOrder.TrackingCode, shippingOrder);
         }
     }
 }

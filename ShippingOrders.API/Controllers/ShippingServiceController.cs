@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc;
 using ShippingOrders.Application.Services;
 
 namespace ShippingOrders.API.Controllers
@@ -15,9 +15,9 @@ namespace ShippingOrders.API.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetAllServices()
+        public async Task<IActionResult> GetAll()
         {
-            var shippingServices = await _service.GetAllServicesAsync();
+            var shippingServices = await _service.GetAll();
 
             return Ok(shippingServices);
         }

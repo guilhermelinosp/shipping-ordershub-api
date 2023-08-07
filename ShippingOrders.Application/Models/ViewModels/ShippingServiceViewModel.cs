@@ -1,14 +1,16 @@
-namespace ShippingOrders.Core.Entities
+namespace ShippingOrders.Application.Models.ViewModels
 {
-    public class ShippingService : EntityBase
+    public class ShippingServiceViewModel
     {
-        public ShippingService(string title, decimal pricePerKg, decimal fixedPrice) : base()
+        public ShippingServiceViewModel(Guid id, string title, decimal pricePerKg, decimal fixedPrice)
         {
+            Id = id;
             Title = title;
             PricePerKg = pricePerKg;
             FixedPrice = fixedPrice;
         }
 
+        public Guid Id { get; private set; }
         public string Title { get; private set; }
         public decimal PricePerKg { get; private set; }
         public decimal FixedPrice { get; private set; }

@@ -1,9 +1,9 @@
-﻿using ShippingOrders.Application.ViewModels;
+using ShippingOrders.Application.Models.ViewModels;
 
 namespace ShippingOrders.Application.Services
 {
     public interface IShippingServiceService
     {
-        Task<List<ShippingServiceViewModel>> GetAllServicesAsync();
+        Task<List<ShippingServiceViewModel>> GetAll();
     }
 }

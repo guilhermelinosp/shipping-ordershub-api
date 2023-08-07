@@ -1,23 +1,23 @@
-﻿using ShippingOrders.Core.Entities;
+using ShippingOrders.Core.Entities;
 
-namespace ShippingOrders.Application.ViewModels
+namespace ShippingOrders.Application.Models.ViewModels
 {
     public class ShippingOrderViewModel
     {
-        private ShippingOrderViewModel(string trackingCode, string description, DateTime postedAt, decimal totalWeight,
+        private ShippingOrderViewModel(string trackingCode, string description, DateTime postedAt, decimal weightInKg,
             string fullAddress)
         {
             TrackingCode = trackingCode;
             Description = description;
             PostedAt = postedAt;
-            TotalWeight = totalWeight;
+            WeightInKg = weightInKg;
             FullAddress = fullAddress;
         }
 
         public string TrackingCode { get; private set; }
         public string Description { get; private set; }
         public DateTime PostedAt { get; private set; }
-        public decimal TotalWeight { get; private set; }
+        public decimal WeightInKg { get; private set; }
         public string FullAddress { get; private set; }
 
         public static ShippingOrderViewModel FromEntity(ShippingOrder shippingOrder)
@@ -28,7 +28,7 @@ namespace ShippingOrders.Application.ViewModels
                 shippingOrder.TrackingCode,
                 shippingOrder.Description,
                 shippingOrder.PostedAt,
-                shippingOrder.TotalWeight,
+                shippingOrder.WeightInKg,
                 $"{address.Street}, {address.Number}, {address.ZipCode}, {address.City}, {address.State}, {address.Country}"
             );
         }

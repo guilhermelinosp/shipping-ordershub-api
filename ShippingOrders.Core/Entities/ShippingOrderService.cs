@@ -1,6 +1,6 @@
-﻿namespace ShippingOrders.Core.Entities
+namespace ShippingOrders.Core.Entities
 {
-    public class ShippingOrderService : Base
+    public class ShippingOrderService : EntityBase
     {
         public ShippingOrderService(string title, decimal price) : base()
         {
@@ -8,7 +8,7 @@
             Price = price;
         }
 
-        public string Title { get; set; }
-        public decimal Price { get; set; }
+        public string Title { get; private set; }
+        public decimal Price { get; private set; }
     }
 }

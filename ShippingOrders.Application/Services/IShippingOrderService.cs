@@ -1,12 +1,12 @@
-﻿using ShippingOrders.Application.InputModels;
-using ShippingOrders.Application.ViewModels;
+using ShippingOrders.Application.Models.InputModels;
+using ShippingOrders.Application.Models.ViewModels;
 
 namespace ShippingOrders.Application.Services
 {
     public interface IShippingOrderService
     {
-        Task<string> AddOrderAsync(AddShippingOrderInputModel model);
+        Task<string> Add(AddShippingOrderInputModel model);
 
-        Task<ShippingOrderViewModel>? GetOrderByCodeAsync(string code);
+        Task<ShippingOrderViewModel> GetByCode(string trackingCode);
     }
 }

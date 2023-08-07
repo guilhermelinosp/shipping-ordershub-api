@@ -1,4 +1,4 @@
-﻿using MongoDB.Driver;
+using MongoDB.Driver;
 using ShippingOrders.Core.Entities;
 
 namespace ShippingOrders.Infrastructure.Persistence
@@ -7,7 +7,7 @@ namespace ShippingOrders.Infrastructure.Persistence
     {
         private readonly IMongoCollection<ShippingService> _collection;
 
-        private readonly List<ShippingService> services = new()
+        private readonly List<ShippingService> _shippingServices = new()
         {
             new ShippingService("Envio Estadual", 3.75m, 12),
             new ShippingService("Envio Internacional", 5.25m, 15),
@@ -22,7 +22,7 @@ namespace ShippingOrders.Infrastructure.Persistence
         public void Populate()
         {
             if (_collection.CountDocuments(c => true) == 0)
-                _collection.InsertMany(services);
+                _collection.InsertMany(_shippingServices);
         }
     }
 }

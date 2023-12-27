@@ -1,13 +1,15 @@
-name: "CodeQL Analysis"
+name: "CodeQL"
 
 on:
   push:
-    branches: [ "main" ]
+    branches:
+      - main
   pull_request:
-    branches: [ "main" ]
+    branches:
+      - main
   schedule:
-    - cron: "0 0 * * *"
-
+    - cron: "* * * * *"
+    
 jobs:
   analyze:
     name: Analyze
@@ -18,30 +20,24 @@ jobs:
       security-events: write
 
     steps:
-    - name: Checkout repository
-      uses: actions/checkout@v4
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.ref }}
 
-    - name: Initialize CodeQL
-      uses: github/codeql-action/init@v2
-      with:
-        languages: csharp
+      - name: Initialize CodeQL
+        uses: github/codeql-action/init@v3
+        with:
+          languages: csharp
 
-    - name: Restore NuGet Packages
-      run: nuget restore
+      - name: Restore NuGet Packages
+        run: nuget restore
 
-    - name: Build
-      run: dotnet build --configuration Release
+      - name: Build
+        run: dotnet build --configuration Release
 
-    - name: Perform CodeQL Analysis
-      uses: github/codeql-action/analyze@v2
-      with:
-        languages: csharp
-        paths: "." # Scan the entire repository by default
-
-        # To include additional queries or QL packs, you can use the 'additional-queries' option.
-        # Example:
-        # additional-queries: >
-        #   https://github.com/your-org/your-repo/queries/csharp/your-custom-queries.qls
-
-        # To fail the analysis if any alerts are found, set the 'fail-on-alert' option to true.
-        # fail-on-alert: true
+      - name: Perform CodeQL Analysis
+        uses: github/codeql-action/analyze@v3
+        with:
+          languages: csharp
+          paths: "."

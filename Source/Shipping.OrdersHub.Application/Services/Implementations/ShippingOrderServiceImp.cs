@@ -2,37 +2,36 @@ using Shipping.OrdersHub.Application.Models.InputModels;
 using Shipping.OrdersHub.Application.Models.ViewModels;
 using Shipping.OrdersHub.Domain.Repositories;
 
-namespace Shipping.OrdersHub.Application.Services.Implementations
+namespace Shipping.OrdersHub.Application.Services.Implementations;
+
+public class ShippingOrderServiceImp : IShippingOrderService
 {
-    public class ShippingOrderServiceImp : IShippingOrderService
-    {
-        private readonly IShippingOrderRepository _repository;
+	private readonly IShippingOrderRepository _repository;
 
-        public ShippingOrderServiceImp(IShippingOrderRepository repository)
-        {
-            _repository = repository;
-        }
+	public ShippingOrderServiceImp(IShippingOrderRepository repository)
+	{
+		_repository = repository;
+	}
 
-        public async Task<string> Add(AddShippingOrderInputModel model)
-        {
-            var shippingOrder = model.ToEntity();
-            var shippingServices = model
-                .Services
-                .Select(s => s.ToEntity())
-                .ToList();
+	public async Task<string> Add(AddShippingOrderInputModel model)
+	{
+		var shippingOrder = model.ToEntity();
+		var shippingServices = model
+			.Services
+			.Select(s => s.ToEntity())
+			.ToList();
 
-            shippingOrder.SetupServices(shippingServices);
+		shippingOrder.SetupServices(shippingServices);
 
-            await _repository.AddAsync(shippingOrder);
+		await _repository.AddAsync(shippingOrder);
 
-            return shippingOrder.TrackingCode;
-        }
+		return shippingOrder.TrackingCode;
+	}
 
-        public async Task<ShippingOrderViewModel> GetByCode(string trackingCode)
-        {
-            var shippingOrder = await _repository.GetByCodeAsync(trackingCode);
+	public async Task<ShippingOrderViewModel> GetByCode(string trackingCode)
+	{
+		var shippingOrder = await _repository.GetByCodeAsync(trackingCode);
 
-            return ShippingOrderViewModel.FromEntity(shippingOrder);
-        }
-    }
+		return ShippingOrderViewModel.FromEntity(shippingOrder);
+	}
 }

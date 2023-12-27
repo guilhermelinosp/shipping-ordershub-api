@@ -10,69 +10,64 @@ namespace Shipping.OrdersHub.Application.Subscribers;
 
 public class ShippingOrderCompletedSubscriber : BackgroundService
 {
-    private readonly IModel _channel;
-    private const string Queue = "shipping-orders-service/shipping-order-completed";
-    private const string RoutingKeySubscribe = "shipping-order-completed";
-    private readonly IServiceProvider _serviceProvider;
-    private const string TrackingsExchange = "trackings-service";
+	private readonly IModel _channel;
+	private const string Queue = "shipping-orders-service/shipping-order-completed";
+	private const string RoutingKeySubscribe = "shipping-order-completed";
+	private readonly IServiceProvider _serviceProvider;
+	private const string TrackingsExchange = "trackings-service";
 
-    public ShippingOrderCompletedSubscriber(IServiceProvider serviceProvider)
-    {
-        var connectionFactory = new ConnectionFactory
-        {
-            HostName = "localhost",
-            UserName = "guest",
-            Password = "guest"
-        };
+	public ShippingOrderCompletedSubscriber(IServiceProvider serviceProvider)
+	{
+		var connectionFactory = new ConnectionFactory
+		{
+			HostName = "localhost",
+			UserName = "guest",
+			Password = "guest"
+		};
 
-        var connection = connectionFactory.CreateConnection("shipping-order-completed-consumer");
+		var connection = connectionFactory.CreateConnection("shipping-order-completed-consumer");
 
-        _channel = connection.CreateModel();
+		_channel = connection.CreateModel();
 
-        _channel.QueueDeclare(
-            queue: Queue,
-            durable: true,
-            exclusive: false,
-            autoDelete: false);
+		_channel.QueueDeclare(
+			Queue,
+			true,
+			false,
+			false);
 
-        _channel.QueueBind(Queue, TrackingsExchange, RoutingKeySubscribe);
+		_channel.QueueBind(Queue, TrackingsExchange, RoutingKeySubscribe);
 
-        _serviceProvider = serviceProvider;
-    }
+		_serviceProvider = serviceProvider;
+	}
 
-    protected override Task ExecuteAsync(CancellationToken stoppingToken)
-    {
-        var consumer = new EventingBasicConsumer(_channel);
+	protected override Task ExecuteAsync(CancellationToken stoppingToken)
+	{
+		var consumer = new EventingBasicConsumer(_channel);
 
-        consumer.Received += (sender, eventArgs) =>
-        {
-            var contentArray = eventArgs.Body.ToArray(); 
-            var contentString = Encoding.UTF8.GetString(contentArray);
-            var @event = JsonConvert.DeserializeObject<ShippingOrderIsCompletedEvent>(contentString);
+		consumer.Received += (sender, eventArgs) =>
+		{
+			var contentArray = eventArgs.Body.ToArray();
+			var contentString = Encoding.UTF8.GetString(contentArray);
+			var @event = JsonConvert.DeserializeObject<ShippingOrderIsCompletedEvent>(contentString);
 
-            Console.WriteLine($"Message ShippingOrderIsCompletedEvent received with Code {@event!.TrackingCode}");
+			Console.WriteLine($"Message ShippingOrderIsCompletedEvent received with Code {@event!.TrackingCode}");
 
-            Complete(@event).Wait(stoppingToken);
+			Complete(@event).Wait(stoppingToken);
 
-            _channel.BasicAck(eventArgs.DeliveryTag, false);
-        };
+			_channel.BasicAck(eventArgs.DeliveryTag, false);
+		};
 
-        _channel.BasicConsume(Queue, false, consumer);
+		_channel.BasicConsume(Queue, false, consumer);
 
-        return Task.CompletedTask;
-    }
+		return Task.CompletedTask;
+	}
 
-    private async Task Complete(ShippingOrderIsCompletedEvent @event)
-    {
-        using var scope = _serviceProvider.CreateScope();
-        var repository = scope.ServiceProvider.GetRequiredService<IShippingOrderRepository>();
-        var shippingOrder = await repository.GetByCodeAsync(@event.TrackingCode!);
-        shippingOrder.SetCompleted();
-        await repository.UpdateAsync(shippingOrder);
-    }
-}
-
-public class ShippingOrderIsCompletedEvent
-{
-    public string? TrackingCode { get; set; }
+	private async Task Complete(ShippingOrderIsCompletedEvent @event)
+	{
+		using var scope = _serviceProvider.CreateScope();
+		var repository = scope.ServiceProvider.GetRequiredService<IShippingOrderRepository>();
+		var shippingOrder = await repository.GetByCodeAsync(@event.TrackingCode!);
+		shippingOrder.SetCompleted();
+		await repository.UpdateAsync(shippingOrder);
+	}
 }

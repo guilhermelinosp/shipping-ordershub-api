@@ -1,9 +1,8 @@
 using Shipping.OrdersHub.Application.Models.ViewModels;
 
-namespace Shipping.OrdersHub.Application.Services
+namespace Shipping.OrdersHub.Application.Services;
+
+public interface IShippingServiceService
 {
-    public interface IShippingServiceService
-    {
-        Task<List<ShippingServiceViewModel>> GetAll();
-    }
+	Task<List<ShippingServiceViewModel>> GetAll();
 }

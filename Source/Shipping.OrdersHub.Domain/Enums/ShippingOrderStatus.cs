@@ -1,9 +1,8 @@
-namespace Shipping.OrdersHub.Domain.Enums
+namespace Shipping.OrdersHub.Domain.Enums;
+
+public enum ShippingOrderStatus
 {
-    public enum ShippingOrderStatus
-    {
-        Started = 1,
-        Delivered = 2,
-        Cancelled = 3
-    }
+	Started = 1,
+	Delivered = 2,
+	Cancelled = 3
 }

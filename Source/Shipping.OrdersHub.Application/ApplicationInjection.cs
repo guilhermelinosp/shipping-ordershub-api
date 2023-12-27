@@ -4,31 +4,30 @@ using Shipping.OrdersHub.Application.Services.Implementations;
 using Shipping.OrdersHub.Application.Subscribers;
 using Shipping.OrdersHub.Infrastructure;
 
-namespace Shipping.OrdersHub.Application
+namespace Shipping.OrdersHub.Application;
+
+public static class ApplicationInjection
 {
-    public static class ApplicationInjection
-    {
-        public static void AddApplication(this IServiceCollection services)
-        {
-            services
-                .AddApplicationServices()
-                .AddSubscribers()
-                .AddInfrastructureInjection();
-        }
+	public static void AddApplication(this IServiceCollection services)
+	{
+		services
+			.AddApplicationServices()
+			.AddSubscribers()
+			.AddInfrastructureInjection();
+	}
 
-        private static IServiceCollection AddApplicationServices(this IServiceCollection services)
-        {
-            services.AddScoped<IShippingOrderService, ShippingOrderServiceImp>();
-            services.AddScoped<IShippingServiceService, ShippingServiceServiceImp>();
+	private static IServiceCollection AddApplicationServices(this IServiceCollection services)
+	{
+		services.AddScoped<IShippingOrderService, ShippingOrderServiceImp>();
+		services.AddScoped<IShippingServiceService, ShippingServiceServiceImp>();
 
-            return services;
-        }
+		return services;
+	}
 
-        private static IServiceCollection AddSubscribers(this IServiceCollection services)
-        {
-            services.AddHostedService<ShippingOrderCompletedSubscriber>();
+	private static IServiceCollection AddSubscribers(this IServiceCollection services)
+	{
+		services.AddHostedService<ShippingOrderCompletedSubscriber>();
 
-            return services;
-        }
-    }
+		return services;
+	}
 }

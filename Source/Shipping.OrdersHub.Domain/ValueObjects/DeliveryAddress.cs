@@ -1,7 +1,12 @@
-namespace Shipping.OrdersHub.Domain.ValueObjects
+namespace Shipping.OrdersHub.Domain.ValueObjects;
+
+public record DeliveryAddress(
+	string Street,
+	string Number,
+	string ZipCode,
+	string City,
+	string State,
+	string Country,
+	string ContactEmail)
 {
-    public record DeliveryAddress(string Street, string Number, string ZipCode, string City, string State,
-        string Country, string ContactEmail)
-    {
-    }
 }

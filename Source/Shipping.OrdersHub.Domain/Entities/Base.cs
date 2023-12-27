@@ -1,7 +1,6 @@
-﻿namespace Shipping.OrdersHub.Domain.Entities
+﻿namespace Shipping.OrdersHub.Domain.Entities;
+
+public abstract class Base
 {
-    public abstract class Base
-    {
-        public Guid Id { get; private set; } = Guid.NewGuid();
-    }
+	public Guid Id { get; private set; } = Guid.NewGuid();
 }

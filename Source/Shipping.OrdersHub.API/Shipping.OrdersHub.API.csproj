@@ -5,6 +5,7 @@
         <RootNamespace>Shipping.OrdersHub.API</RootNamespace>
         <Nullable>enable</Nullable>
         <ImplicitUsings>enable</ImplicitUsings>
+        <UserSecretsId>3b696b3b-63f9-49d3-988a-66cdc2fa70be</UserSecretsId>
     </PropertyGroup>
 
     <ItemGroup>

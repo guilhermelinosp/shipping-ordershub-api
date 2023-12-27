@@ -1,6 +1,6 @@
 namespace Shipping.OrdersHub.Domain.Enums;
 
-public enum ShippingOrderStatus
+public enum OrderStatus
 {
 	Started = 1,
 	Delivered = 2,

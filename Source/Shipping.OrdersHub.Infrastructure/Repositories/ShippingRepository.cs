@@ -4,14 +4,9 @@ using Shipping.OrdersHub.Domain.Repositories;
 
 namespace Shipping.OrdersHub.Infrastructure.Persistence.Repositories;
 
-public class ShippingOrderRepositoryImp : IShippingOrderRepository
+public class ShippingRepository(IMongoDatabase database) : IShippingRepository
 {
-	private readonly IMongoCollection<ShippingOrder> _collection;
-
-	public ShippingOrderRepositoryImp(IMongoDatabase database)
-	{
-		_collection = database.GetCollection<ShippingOrder>("shipping-orders");
-	}
+	private readonly IMongoCollection<ShippingOrder> _collection = database.GetCollection<ShippingOrder>("shipping-orders");
 
 	public async Task AddAsync(ShippingOrder shippingOrder)
 	{
@@ -27,5 +22,12 @@ public class ShippingOrderRepositoryImp : IShippingOrderRepository
 	{
 		await _collection
 			.ReplaceOneAsync(so => so.TrackingCode == shippingOrder.TrackingCode, shippingOrder);
+	}
+	
+	public async Task<List<ShippingService>> GetAllAsync()
+	{
+		var  collection = database.GetCollection<ShippingService>("shipping-services");
+
+		return await collection.Find(c => true).ToListAsync();
 	}
 }

@@ -2,11 +2,13 @@ using Shipping.OrdersHub.Domain.Entities;
 
 namespace Shipping.OrdersHub.Domain.Repositories;
 
-public interface IShippingOrderRepository
+public interface IShippingRepository
 {
 	Task<ShippingOrder> GetByCodeAsync(string code);
 
 	Task AddAsync(ShippingOrder shippingOrder);
 
 	Task UpdateAsync(ShippingOrder shippingOrder);
+	
+	Task<List<ShippingService>> GetAllAsync();
 }
